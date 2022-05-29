@@ -8,7 +8,7 @@ from IPython.display import Audio
 from scipy.io import wavfile
 
 # Load the model.
-model = "/Users/srancescosasso/ProgSysAg/yamnet_1"
+model = hub.load("/Users/srancescosasso/ProgSysAg/yamnet_1")
 
 # Find the name of the class with the top score when mean-aggregated across frames.
 def class_names_from_csv(class_map_csv_text):
@@ -21,8 +21,8 @@ def class_names_from_csv(class_map_csv_text):
 
     return class_names
 
-#class_map_path = model.class_map_path().numpy()
-#class_names = class_names_from_csv(class_map_path)
+class_map_path = model.class_map_path().numpy()
+class_names = class_names_from_csv(class_map_path)
 
 def ensure_sample_rate(original_sample_rate, waveform,
                        desired_sample_rate=16000):
@@ -33,7 +33,7 @@ def ensure_sample_rate(original_sample_rate, waveform,
         waveform = scipy.signal.resample(waveform, desired_length)
     return desired_sample_rate, waveform
 
-# wav_file_name = 'speech_whistling2.wav'
+#wav_file_name = '/Users/srancescosasso/ProgSysAg/speech_whistling2.wav'
 wav_file_name = '/Users/srancescosasso/ProgSysAg/miaow_16k.wav'
 sample_rate, wav_data = wavfile.read(wav_file_name, 'rb')
 sample_rate, wav_data = ensure_sample_rate(sample_rate, wav_data)
@@ -47,8 +47,8 @@ print(f'Size of the input: {len(wav_data)}')
 # Listening to the wav file.
 Audio(wav_data, rate=sample_rate)
 
-waveform = np.zeros(3 * 16000, dtype=np.float32)
-
+waveform = wav_data / tf.int16.max
+print(waveform)
 # Run the model, check the output.
 scores, embeddings, spectrogram = model(waveform)
 
