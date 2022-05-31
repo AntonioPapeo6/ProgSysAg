@@ -16,7 +16,7 @@ testing_wav_file_name = tf.keras.utils.get_file('/Users/srancescosasso/ProgSysAg
                                                 cache_subdir='test_data')
 
 print("Per sentire l'audio click -> ",testing_wav_file_name)
-"""---------------------------------------------CAUSA ERRORI-----------------------------------------------------------"""
+
 @tf.function
 def load_wav_16k_mono(filename):
     """ Load a WAV file, convert it to a float tensor, resample to 16 kHz single-channel audio. """
@@ -34,7 +34,7 @@ testing_wav_data = load_wav_16k_mono(testing_wav_file_name)
 _ = plt.plot(testing_wav_data)
 
 display.Audio(testing_wav_data,rate=16000)
-"""------------------------------------------------------------------------------------------------------------------"""
+
 class_map_path = yamnet_model.class_map_path().numpy().decode('utf-8')
 class_names =list(pd.read_csv(class_map_path)['display_name'])
 
@@ -49,3 +49,14 @@ inferred_class = class_names[top_class]
 
 print(f'The main sound is: {inferred_class}')
 print(f'The embeddings shape: {embeddings.shape}')
+
+"""---------------------------------------------VEDERE COME CARICARE DATASET-----------------------------------------------------------"""
+main_ds = tf.data.Dataset.from_tensor_slices((filenames, targets, folds))
+main_ds.element_spec
+
+def load_wav_for_map(filename, label, fold):
+    return load_wav_16k_mono(filename), label, fold
+
+main_ds = main_ds.map(load_wav_for_map)
+main_ds.element_spec
+"""------------------------------------------------------------------------------------------------------------------"""
