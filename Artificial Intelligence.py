@@ -33,6 +33,7 @@ testing_wav_data = load_wav_16k_mono(testing_wav_file_name)
 
 _ = plt.plot(testing_wav_data)
 
+display.Audio(testing_wav_data,rate=16000)
 """------------------------------------------------------------------------------------------------------------------"""
 class_map_path = yamnet_model.class_map_path().numpy().decode('utf-8')
 class_names =list(pd.read_csv(class_map_path)['display_name'])
