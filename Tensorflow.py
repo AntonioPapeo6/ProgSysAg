@@ -34,7 +34,7 @@ def ensure_sample_rate(original_sample_rate, waveform,
     return desired_sample_rate, waveform
 
 #wav_file_name = '/Users/srancescosasso/ProgSysAg/speech_whistling2.wav'
-wav_file_name = '/Users/srancescosasso/ProgSysAg/miaow_16k.wav'
+wav_file_name = '/miaow_16k.wav'
 sample_rate, wav_data = wavfile.read(wav_file_name, 'rb')
 sample_rate, wav_data = ensure_sample_rate(sample_rate, wav_data)
 

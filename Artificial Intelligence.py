@@ -11,8 +11,8 @@ import tensorflow_io as tfio
 yamnet_model_handle = '/Users/srancescosasso/ProgSysAg/yamnet_1'
 yamnet_model = hub.load(yamnet_model_handle)
 
-testing_wav_file_name = tf.keras.utils.get_file('/Users/srancescosasso/ProgSysAg/miaow_16k.wav','/Users/srancescosasso/ProgSysAg/miaow_16k.wav',
-                                                cache_dir='./',
+testing_wav_file_name = tf.keras.utils.get_file('/Users/srancescosasso/ProgSysAg/Audio/miaow_16k.wav','/Users/srancescosasso/ProgSysAg/Audio/miaow_16k.wav',
+                                                cache_dir='.idea/',
                                                 cache_subdir='test_data')
 
 print("Per sentire l'audio click -> ",testing_wav_file_name)
