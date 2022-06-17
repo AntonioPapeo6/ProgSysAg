@@ -8,14 +8,16 @@ import tensorflow as tf
 import tensorflow_hub as hub
 import tensorflow_io as tfio
 
-yamnet_model_handle = '/Users/srancescosasso/ProgSysAg/yamnet1'
+# Caricamento YAMNet da Tensorflow HUB
+
+yamnet_model_handle = 'https://tfhub.dev/google/yamnet/1'
 yamnet_model = hub.load(yamnet_model_handle)
 
-testing_wav_file_name = tf.keras.utils.get_file('/Users/srancescosasso/ProgSysAg/Audio/miaow_16k.wav','/Users/srancescosasso/ProgSysAg/Audio/miaow_16k.wav',
-                                                cache_dir='.idea/',
-                                                cache_subdir='test_data')
+testing_wav_file_name = 'DATASET/TEST/RUSSARE/2-114609-A-28.wav'
 
 print("Per sentire l'audio click -> ",testing_wav_file_name)
+
+# Funzione che carica il file audio e lo imposta al giusto sample rate
 
 @tf.function
 def load_wav_16k_mono(filename):
@@ -35,12 +37,16 @@ _ = plt.plot(testing_wav_data)
 
 display.Audio(testing_wav_data,rate=16000)
 
+# Caricare la mappatura della classe
+
 class_map_path = yamnet_model.class_map_path().numpy().decode('utf-8')
-class_names =list(pd.read_csv(class_map_path)['display_name'])
+class_names = list(pd.read_csv(class_map_path)['display_name'])
 
 for name in class_names[:20]:
     print(name)
 print('...')
+
+# Esegue l'inferenza
 
 scores, embeddings, spectrogram = yamnet_model(testing_wav_data)
 class_scores = tf.reduce_mean(scores, axis=0)
@@ -50,25 +56,27 @@ inferred_class = class_names[top_class]
 print(f'The main sound is: {inferred_class}')
 print(f'The embeddings shape: {embeddings.shape}')
 
+# Esplora i dati
 
-esc50_csv = '/Users/srancescosasso/ProgSysAg/ESC-50-master/meta/esc50.csv'
-base_data_path = '/Users/srancescosasso/ProgSysAg/ESC-50-master/audio'
+Audio_csv = 'Audio_CSV.csv'
 
-pd_data = pd.read_csv(esc50_csv)
+pd_data = pd.read_csv(Audio_csv, delimiter=";")
 pd_data.head()
 
-my_classes = ['dog', 'cat']
-map_class_to_id = {'dog':0, 'cat':1}
+# Inserisco id per le classi
+
+my_classes = ['DOLORE', 'PIANTO_BAMBINO','RESPIRO','RISATA','RUSSARE','SBADIGLIO', 'TOSSE', 'URLA']
+map_class_to_id = {'DOLORE': 0, 'PIANTO_BAMBINO': 1, 'RESPIRO': 2, 'RISATA': 3, 'RUSSARE': 4, 'SBADIGLIO': 5, 'STARNUTO': 6,
+                   'TOSSE': 7, 'URLA': 8}
 
 filtered_pd = pd_data[pd_data.category.isin(my_classes)]
 
 class_id = filtered_pd['category'].apply(lambda name: map_class_to_id[name])
 filtered_pd = filtered_pd.assign(target=class_id)
 
-full_path = filtered_pd['filename'].apply(lambda row: os.path.join(base_data_path, row))
-filtered_pd = filtered_pd.assign(filename=full_path)
-
 filtered_pd.head(10)
+
+# Carica i file audio e recupera gli incorporamenti
 
 filenames = filtered_pd['filename']
 targets = filtered_pd['target']
@@ -83,7 +91,8 @@ def load_wav_for_map(filename, label, fold):
 main_ds = main_ds.map(load_wav_for_map)
 main_ds.element_spec
 
-# applies the embedding extraction model to a wav data
+# Estraggo le feature (applico modello di estrazione ai wav)
+
 def extract_embedding(wav_data, label, fold):
     ''' run YAMNet to extract embedding from the wav data '''
     scores, embeddings, spectrogram = yamnet_model(wav_data)
@@ -92,16 +101,20 @@ def extract_embedding(wav_data, label, fold):
             tf.repeat(label, num_embeddings),
             tf.repeat(fold, num_embeddings))
 
-# extract embedding
+# Estrazione
+
 main_ds = main_ds.map(extract_embedding).unbatch()
 main_ds.element_spec
 
-cached_ds = main_ds.cache()
-train_ds = cached_ds.filter(lambda embedding, label, fold: fold < 4)
-val_ds = cached_ds.filter(lambda embedding, label, fold: fold == 4)
-test_ds = cached_ds.filter(lambda embedding, label, fold: fold == 5)
+# Divisione dati
 
-# remove the folds column now that it's not needed anymore
+cached_ds = main_ds.cache()
+train_ds = cached_ds.filter(lambda embedding, label, fold: fold == 1)
+val_ds = cached_ds.filter(lambda embedding, label, fold: fold == 2)
+test_ds = cached_ds.filter(lambda embedding, label, fold: fold == 3)
+
+# Rimuovo colonna "fold" perchè non più necessaria
+
 remove_fold_column = lambda embedding, label, fold: (embedding, label)
 
 train_ds = train_ds.map(remove_fold_column)
@@ -111,6 +124,8 @@ test_ds = test_ds.map(remove_fold_column)
 train_ds = train_ds.cache().shuffle(1000).batch(32).prefetch(tf.data.AUTOTUNE)
 val_ds = val_ds.cache().batch(32).prefetch(tf.data.AUTOTUNE)
 test_ds = test_ds.cache().batch(32).prefetch(tf.data.AUTOTUNE)
+
+# Creazione modello
 
 my_model = tf.keras.Sequential([
     tf.keras.layers.Input(shape=(1024), dtype=tf.float32,
@@ -139,13 +154,17 @@ loss, accuracy = my_model.evaluate(test_ds)
 print("Loss: ", loss)
 print("Accuracy: ", accuracy)
 
+# Prova modello
+
 scores, embeddings, spectrogram = yamnet_model(testing_wav_data)
 result = my_model(embeddings).numpy()
 
 inferred_class = my_classes[result.mean(axis=0).argmax()]
 print(f'The main sound is: {inferred_class}')
 
-class ReduceMeanLayer(tf.keras.layers.Layer):
+# Salva un modello che può prendere direttamente un file WAV come input
+
+""""class ReduceMeanLayer(tf.keras.layers.Layer):
     def __init__(self, axis=0, **kwargs):
         super(ReduceMeanLayer, self).__init__(**kwargs)
         self.axis = axis
@@ -174,4 +193,4 @@ print(f'The main sound is: {cat_or_dog}')
 
 serving_results = reloaded_model.signatures['serving_default'](testing_wav_data)
 cat_or_dog = my_classes[tf.argmax(serving_results['classifier'])]
-print(f'The main sound is: {cat_or_dog}')
+print(f'The main sound is: {cat_or_dog}')"""""
