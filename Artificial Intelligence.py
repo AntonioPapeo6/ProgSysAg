@@ -1,9 +1,7 @@
-import os
+
 from IPython import display
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
-
 import tensorflow as tf
 import tensorflow_hub as hub
 import tensorflow_io as tfio
@@ -13,9 +11,7 @@ import tensorflow_io as tfio
 yamnet_model_handle = 'https://tfhub.dev/google/yamnet/1'
 yamnet_model = hub.load(yamnet_model_handle)
 
-testing_wav_file_name = 'DATASET/TEST/RUSSARE/2-114609-A-28.wav'
-
-print("Per sentire l'audio click -> ",testing_wav_file_name)
+testing_wav_file_name = 'DATASET/TEST/DOLORE/S10_pain_peak_03.wav'
 
 # Funzione che carica il file audio e lo imposta al giusto sample rate
 
@@ -42,9 +38,6 @@ display.Audio(testing_wav_data,rate=16000)
 class_map_path = yamnet_model.class_map_path().numpy().decode('utf-8')
 class_names = list(pd.read_csv(class_map_path)['display_name'])
 
-for name in class_names[:20]:
-    print(name)
-print('...')
 
 # Esegue l'inferenza
 
@@ -53,8 +46,6 @@ class_scores = tf.reduce_mean(scores, axis=0)
 top_class = tf.argmax(class_scores)
 inferred_class = class_names[top_class]
 
-print(f'The main sound is: {inferred_class}')
-print(f'The embeddings shape: {embeddings.shape}')
 
 # Esplora i dati
 
@@ -65,16 +56,14 @@ pd_data.head()
 
 # Inserisco id per le classi
 
-my_classes = ['DOLORE', 'PIANTO_BAMBINO','RESPIRO','RISATA','RUSSARE','SBADIGLIO', 'TOSSE', 'URLA']
-map_class_to_id = {'DOLORE': 0, 'PIANTO_BAMBINO': 1, 'RESPIRO': 2, 'RISATA': 3, 'RUSSARE': 4, 'SBADIGLIO': 5, 'STARNUTO': 6,
-                   'TOSSE': 7, 'URLA': 8}
+my_classes = ['DOLORE', 'PIANTO_BAMBINO','RESPIRO','RISATA','RUSSARE','SBADIGLIO']
+map_class_to_id = {'DOLORE': 0, 'PIANTO_BAMBINO': 1, 'RESPIRO': 2, 'RISATA': 3, 'RUSSARE': 4, 'SBADIGLIO': 5,
+                   'STARNUTO': 6}
 
 filtered_pd = pd_data[pd_data.category.isin(my_classes)]
 
 class_id = filtered_pd['category'].apply(lambda name: map_class_to_id[name])
 filtered_pd = filtered_pd.assign(target=class_id)
-
-filtered_pd.head(10)
 
 # Carica i file audio e recupera gli incorporamenti
 
@@ -161,36 +150,3 @@ result = my_model(embeddings).numpy()
 
 inferred_class = my_classes[result.mean(axis=0).argmax()]
 print(f'The main sound is: {inferred_class}')
-
-# Salva un modello che può prendere direttamente un file WAV come input
-
-""""class ReduceMeanLayer(tf.keras.layers.Layer):
-    def __init__(self, axis=0, **kwargs):
-        super(ReduceMeanLayer, self).__init__(**kwargs)
-        self.axis = axis
-
-    def call(self, input):
-        return tf.math.reduce_mean(input, axis=self.axis)
-
-saved_model_path = './dogs_and_cats_yamnet'
-
-input_segment = tf.keras.layers.Input(shape=(), dtype=tf.float32, name='audio')
-embedding_extraction_layer = hub.KerasLayer(yamnet_model_handle,
-                                            trainable=False, name='yamnet')
-_, embeddings_output, _ = embedding_extraction_layer(input_segment)
-serving_outputs = my_model(embeddings_output)
-serving_outputs = ReduceMeanLayer(axis=0, name='classifier')(serving_outputs)
-serving_model = tf.keras.Model(input_segment, serving_outputs)
-serving_model.save(saved_model_path, include_optimizer=False)
-
-tf.keras.utils.plot_model(serving_model)
-
-reloaded_model = tf.saved_model.load(saved_model_path)
-
-reloaded_results = reloaded_model(testing_wav_data)
-cat_or_dog = my_classes[tf.argmax(reloaded_results)]
-print(f'The main sound is: {cat_or_dog}')
-
-serving_results = reloaded_model.signatures['serving_default'](testing_wav_data)
-cat_or_dog = my_classes[tf.argmax(serving_results['classifier'])]
-print(f'The main sound is: {cat_or_dog}')"""""
