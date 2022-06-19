@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="28ba6d27-2f43-4cc8-b579-667b53e84571" name="Default Changelist" comment="Eliminato codice inutile, sistemati i path dei file che non trovava e randomizzato il training nel CSV" />
+    <list default="true" id="28ba6d27-2f43-4cc8-b579-667b53e84571" name="Default Changelist" comment="Randomizzato il TRAINING nel CSV, risolti problemi vari con file audio">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Artificial Intelligence.py" beforeDir="false" afterPath="$PROJECT_DIR$/Artificial Intelligence.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Audio_CSV.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Audio_CSV.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yamnet1/assets/yamnet_class_map.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yamnet1/saved_model.pb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yamnet1/variables/variables.data-00000-of-00001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yamnet1/variables/variables.index" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -102,7 +110,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655475727993</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Randomizzato il TRAINING nel CSV, risolti problemi vari con file audio">
+      <created>1655647125927</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1655647125927</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -115,11 +130,13 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Completato CSV e codice (da sistemare path audio di URLA e TOSSE)" />
     <MESSAGE value="Eliminato codice inutile, sistemati i path dei file che non trovava e randomizzato il training nel CSV" />
-    <option name="LAST_COMMIT_MESSAGE" value="Eliminato codice inutile, sistemati i path dei file che non trovava e randomizzato il training nel CSV" />
+    <MESSAGE value="Randomizzato il TRAINING nel CSV, risolti problemi vari con file audio" />
+    <option name="LAST_COMMIT_MESSAGE" value="Randomizzato il TRAINING nel CSV, risolti problemi vari con file audio" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

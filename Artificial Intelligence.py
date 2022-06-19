@@ -8,10 +8,10 @@ import tensorflow_io as tfio
 
 # Caricamento YAMNet da Tensorflow HUB
 
-yamnet_model_handle = 'https://tfhub.dev/google/yamnet/1'
+yamnet_model_handle = 'YAMNet'
 yamnet_model = hub.load(yamnet_model_handle)
 
-testing_wav_file_name = 'DATASET/TEST/DOLORE/S10_pain_peak_03.wav'
+testing_wav_file_name = 'DATASET/TEST/TOSSE/738b0e2-cce6-419d-a3e2-dec2fe5f6149.wav'
 
 # Funzione che carica il file audio e lo imposta al giusto sample rate
 
