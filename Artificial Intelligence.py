@@ -6,18 +6,17 @@ import tensorflow as tf
 import tensorflow_hub as hub
 import tensorflow_io as tfio
 
-# Caricamento YAMNet da Tensorflow HUB
+""" Caricamento YAMNet da Tensorflow HUB """
 
 yamnet_model_handle = 'YAMNet'
 yamnet_model = hub.load(yamnet_model_handle)
 
-testing_wav_file_name = 'DATASET/TEST/TOSSE/738b0e2-cce6-419d-a3e2-dec2fe5f6149.wav'
+testing_wav_file_name = 'DATASET/TEST/RESPIRO/breathing-shallow(95).wav'
 
-# Funzione che carica il file audio e lo imposta al giusto sample rate
+""" Caricamento del file WAV e conversione in 16 kHz canale mono """
 
 @tf.function
 def load_wav_16k_mono(filename):
-    """ Load a WAV file, convert it to a float tensor, resample to 16 kHz single-channel audio. """
     file_contents = tf.io.read_file(filename)
     wav, sample_rate = tf.audio.decode_wav(
         file_contents,
@@ -33,13 +32,13 @@ _ = plt.plot(testing_wav_data)
 
 display.Audio(testing_wav_data,rate=16000)
 
-# Caricare la mappatura della classe
+""" Carica la mappatura della classe """
 
 class_map_path = yamnet_model.class_map_path().numpy().decode('utf-8')
 class_names = list(pd.read_csv(class_map_path)['display_name'])
 
 
-# Esegue l'inferenza
+""" Esegue l'inferenza """
 
 scores, embeddings, spectrogram = yamnet_model(testing_wav_data)
 class_scores = tf.reduce_mean(scores, axis=0)
@@ -47,14 +46,14 @@ top_class = tf.argmax(class_scores)
 inferred_class = class_names[top_class]
 
 
-# Esplora i dati
+""" Esplora i dati """
 
 Audio_csv = 'Audio_CSV.csv'
 
 pd_data = pd.read_csv(Audio_csv, delimiter=";")
 pd_data.head()
 
-# Inserisco id per le classi
+""" Attribuisce un ID per ogni classe """
 
 my_classes = ['DOLORE', 'PIANTO_BAMBINO','RESPIRO','RISATA','RUSSARE','SBADIGLIO']
 map_class_to_id = {'DOLORE': 0, 'PIANTO_BAMBINO': 1, 'RESPIRO': 2, 'RISATA': 3, 'RUSSARE': 4, 'SBADIGLIO': 5,
@@ -65,7 +64,7 @@ filtered_pd = pd_data[pd_data.category.isin(my_classes)]
 class_id = filtered_pd['category'].apply(lambda name: map_class_to_id[name])
 filtered_pd = filtered_pd.assign(target=class_id)
 
-# Carica i file audio e recupera gli incorporamenti
+""" Carica i file audio e recupera gli incorporamenti """
 
 filenames = filtered_pd['filename']
 targets = filtered_pd['target']
@@ -80,29 +79,26 @@ def load_wav_for_map(filename, label, fold):
 main_ds = main_ds.map(load_wav_for_map)
 main_ds.element_spec
 
-# Estraggo le feature (applico modello di estrazione ai wav)
+""" Estraggo le feature (applico modello di estrazione YAMNet ai file WAV) """
 
 def extract_embedding(wav_data, label, fold):
-    ''' run YAMNet to extract embedding from the wav data '''
     scores, embeddings, spectrogram = yamnet_model(wav_data)
     num_embeddings = tf.shape(embeddings)[0]
     return (embeddings,
             tf.repeat(label, num_embeddings),
             tf.repeat(fold, num_embeddings))
 
-# Estrazione
-
 main_ds = main_ds.map(extract_embedding).unbatch()
 main_ds.element_spec
 
-# Divisione dati
+""" Divisione dati """
 
 cached_ds = main_ds.cache()
 train_ds = cached_ds.filter(lambda embedding, label, fold: fold == 1)
 val_ds = cached_ds.filter(lambda embedding, label, fold: fold == 2)
 test_ds = cached_ds.filter(lambda embedding, label, fold: fold == 3)
 
-# Rimuovo colonna "fold" perchè non più necessaria
+""" Rimuovo colonna "fold" perchè non più necessaria """
 
 remove_fold_column = lambda embedding, label, fold: (embedding, label)
 
@@ -114,7 +110,7 @@ train_ds = train_ds.cache().shuffle(1000).batch(32).prefetch(tf.data.AUTOTUNE)
 val_ds = val_ds.cache().batch(32).prefetch(tf.data.AUTOTUNE)
 test_ds = test_ds.cache().batch(32).prefetch(tf.data.AUTOTUNE)
 
-# Creazione modello
+""" Creazione modello """
 
 my_model = tf.keras.Sequential([
     tf.keras.layers.Input(shape=(1024), dtype=tf.float32,
@@ -143,7 +139,7 @@ loss, accuracy = my_model.evaluate(test_ds)
 print("Loss: ", loss)
 print("Accuracy: ", accuracy)
 
-# Prova modello
+""" Test del modello """
 
 scores, embeddings, spectrogram = yamnet_model(testing_wav_data)
 result = my_model(embeddings).numpy()
