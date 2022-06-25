@@ -11,7 +11,7 @@ import tensorflow_io as tfio
 yamnet_model_handle = 'YAMNet'
 yamnet_model = hub.load(yamnet_model_handle)
 
-testing_wav_file_name = 'INSERIRE PATH FILE DA TESTARE'
+testing_wav_file_name = 'DATASET/TEST/PIANTO_BAMBINO/2cry.wav'
 
 """ Caricamento del file WAV e conversione in 16 kHz canale mono """
 
