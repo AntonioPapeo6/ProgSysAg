@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="28ba6d27-2f43-4cc8-b579-667b53e84571" name="Default Changelist" comment="Inseriti file di documentazione e presentazione progetto, nuovi audio e relativi path nel CSV">
+    <list default="true" id="28ba6d27-2f43-4cc8-b579-667b53e84571" name="Default Changelist" comment="Inserito file da testare">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Artificial Intelligence.py" beforeDir="false" afterPath="$PROJECT_DIR$/Artificial Intelligence.py" afterDir="false" />
     </list>
@@ -140,7 +140,14 @@
       <option name="project" value="LOCAL" />
       <updated>1656171947323</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Inserito file da testare">
+      <created>1656172275438</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1656172275438</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -163,7 +170,8 @@
     <MESSAGE value="Sistemati i commenti (tutti in italiano e tra gli apici)" />
     <MESSAGE value="Inseriti file di documentazione e presentazione progetto" />
     <MESSAGE value="Inseriti file di documentazione e presentazione progetto, nuovi audio e relativi path nel CSV" />
-    <option name="LAST_COMMIT_MESSAGE" value="Inseriti file di documentazione e presentazione progetto, nuovi audio e relativi path nel CSV" />
+    <MESSAGE value="Inserito file da testare" />
+    <option name="LAST_COMMIT_MESSAGE" value="Inserito file da testare" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

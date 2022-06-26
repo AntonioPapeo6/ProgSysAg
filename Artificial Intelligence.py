@@ -11,7 +11,18 @@ import tensorflow_io as tfio
 yamnet_model_handle = 'YAMNet'
 yamnet_model = hub.load(yamnet_model_handle)
 
-testing_wav_file_name = 'DATASET/TEST/PIANTO_BAMBINO/2cry.wav'
+testing_wav_file_name = 'DATASET/TEST/DOLORE/S10_pain_moderate_01.wav'
+
+# AUDIO DI PROVA:
+# - DOLORE: DATASET/TEST/DOLORE/S10_pain_moderate_01.wav
+# - PIANTO BAMBINO: DATASET/TEST/PIANTO_BAMBINO/2cry.wav
+# - RESPIRO: DATASET/TEST/RESPIRO/breathing-deepx.wav
+# - RISATA: DATASET/TEST/RISATA/2mlaugh.wav
+# - RUSSARE: DATASET/TEST/RUSSARE/2snore.wav
+# - SBADIGLIO: DATASET/TEST/SBADIGLIO/mixkit-young-tired-male-yawns-2278.wav
+# - STARNUTO: DATASET/TEST/STARNUTO/2sneeze1.wav
+# - TOSSE: DATASET/TEST/TOSSE/718a0db-2728-402c-8b89-c8669e37aa8f.wav
+# - URLA: DATASET/TEST/URLA/WVST_15_13_0_15_0_0_0.wav
 
 """ Caricamento del file WAV e conversione in 16 kHz canale mono """
 
@@ -55,9 +66,9 @@ pd_data.head()
 
 """ Attribuisce un ID per ogni classe """
 
-my_classes = ['DOLORE', 'PIANTO_BAMBINO','RESPIRO','RISATA','RUSSARE','SBADIGLIO']
+my_classes = ['DOLORE', 'PIANTO_BAMBINO', 'RESPIRO', 'RISATA', 'RUSSARE', 'SBADIGLIO', 'STARNUTO', 'TOSSE', 'URLA']
 map_class_to_id = {'DOLORE': 0, 'PIANTO_BAMBINO': 1, 'RESPIRO': 2, 'RISATA': 3, 'RUSSARE': 4, 'SBADIGLIO': 5,
-                   'STARNUTO': 6}
+                   'STARNUTO': 6, 'TOSSE': 7, 'URLA': 8}
 
 filtered_pd = pd_data[pd_data.category.isin(my_classes)]
 
