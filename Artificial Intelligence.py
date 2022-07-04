@@ -11,7 +11,7 @@ import tensorflow_io as tfio
 yamnet_model_handle = 'YAMNet'
 yamnet_model = hub.load(yamnet_model_handle)
 
-testing_wav_file_name = 'DATASET/VALIDATION/STARNUTO/10804.wav'
+testing_wav_file_name = 'DATASET/VALIDATION/DOLORE/S07_pain_strong_05.wav'
 
 
 """ Caricamento del file WAV e conversione in 16 kHz canale mono """
@@ -137,6 +137,7 @@ history = my_model.fit(train_ds,
 
 loss, accuracy = my_model.evaluate(test_ds)
 
+print("\n\n############################################################################\n")
 print("Loss: ", loss)
 print("Accuracy: ", accuracy)
 
@@ -146,4 +147,7 @@ scores, embeddings, spectrogram = yamnet_model(testing_wav_data)
 result = my_model(embeddings).numpy()
 
 inferred_class = my_classes[result.mean(axis=0).argmax()]
-print(f'The predicted sound is: {inferred_class}')
+
+print("\n############################################################################\n")
+print(f'                 The predicted sound is: {inferred_class} \n')
+print("############################################################################\n")
