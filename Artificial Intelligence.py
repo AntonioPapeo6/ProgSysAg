@@ -11,18 +11,8 @@ import tensorflow_io as tfio
 yamnet_model_handle = 'YAMNet'
 yamnet_model = hub.load(yamnet_model_handle)
 
-testing_wav_file_name = 'DATASET/TEST/DOLORE/S10_pain_moderate_01.wav'
+testing_wav_file_name = 'DATASET/VALIDATION/STARNUTO/10804.wav'
 
-# AUDIO DI PROVA:
-# - DOLORE: DATASET/TEST/DOLORE/S10_pain_moderate_01.wav
-# - PIANTO BAMBINO: DATASET/TEST/PIANTO_BAMBINO/2cry.wav
-# - RESPIRO: DATASET/TEST/RESPIRO/breathing-deepx.wav
-# - RISATA: DATASET/TEST/RISATA/2mlaugh.wav
-# - RUSSARE: DATASET/TEST/RUSSARE/2snore.wav
-# - SBADIGLIO: DATASET/TEST/SBADIGLIO/mixkit-young-tired-male-yawns-2278.wav
-# - STARNUTO: DATASET/TEST/STARNUTO/2sneeze1.wav
-# - TOSSE: DATASET/TEST/TOSSE/718a0db-2728-402c-8b89-c8669e37aa8f.wav
-# - URLA: DATASET/TEST/URLA/WVST_15_13_0_15_0_0_0.wav
 
 """ Caricamento del file WAV e conversione in 16 kHz canale mono """
 
@@ -156,4 +146,4 @@ scores, embeddings, spectrogram = yamnet_model(testing_wav_data)
 result = my_model(embeddings).numpy()
 
 inferred_class = my_classes[result.mean(axis=0).argmax()]
-print(f'The main sound is: {inferred_class}')
+print(f'The predicted sound is: {inferred_class}')

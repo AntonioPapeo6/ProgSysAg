@@ -4,6 +4,9 @@
     <list default="true" id="28ba6d27-2f43-4cc8-b579-667b53e84571" name="Default Changelist" comment="Inserito file da testare">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Artificial Intelligence.py" beforeDir="false" afterPath="$PROJECT_DIR$/Artificial Intelligence.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DOCUMENTAZIONE/Audio _Recognizer_Documentazione (1).docx" beforeDir="false" afterPath="$PROJECT_DIR$/DOCUMENTAZIONE/Audio _Recognizer_Documentazione (1).docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DOCUMENTAZIONE/Audio _Recognizer_Documentazione (1).pdf" beforeDir="false" afterPath="$PROJECT_DIR$/DOCUMENTAZIONE/Audio _Recognizer_Documentazione (1).pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DOCUMENTAZIONE/Presentazione - AudioRecognizer (1).pptx" beforeDir="false" afterPath="$PROJECT_DIR$/DOCUMENTAZIONE/Presentazione - AudioRecognizer (1).pptx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -147,7 +150,14 @@
       <option name="project" value="LOCAL" />
       <updated>1656172275438</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Inserito file da testare">
+      <created>1656255175462</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1656255175462</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
